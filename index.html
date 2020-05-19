@@ -1,0 +1,92 @@
+<html lang="en-US">
+  <head>
+    <title>JS Drumkit</title>
+    <link rel="stylesheet" href="index.css" />
+    <meta charset="UTF-8" />
+    <meta name="author" content="Alex Alonso" />
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="drumkit-container">
+        <div class="key" data-key="65">
+          <kbd>a</kbd>
+          <span>clap</span>
+        </div>
+        <div class="key" data-key="83">
+          <kbd>s</kbd>
+          <span>hihat</span>
+        </div>
+        <div class="key" data-key="68">
+          <kbd>d</kbd>
+          <span>openhat</span>
+        </div>
+        <div class="key" data-key="70">
+          <kbd>f</kbd>
+          <span>boom</span>
+        </div>
+        <div class="key" data-key="71">
+          <kbd>g</kbd>
+          <span>ride</span>
+        </div>
+        <div class="key" data-key="72">
+          <kbd>h</kbd>
+          <span>snare</span>
+        </div>
+        <div class="key" data-key="74">
+          <kbd>j</kbd>
+          <span>tom</span>
+        </div>
+        <div class="key" data-key="75">
+          <kbd>k</kbd>
+          <span>tink</span>
+        </div>
+        <div class="key" data-key="76">
+          <kbd>l</kbd>
+          <span>clap</span>
+        </div>
+      </div>
+    </div>
+
+    <audio data-key="65" src="sounds/clap.wav"></audio>
+    <audio data-key="83" src="sounds/hihat.wav"></audio>
+    <audio data-key="68" src="sounds/openhat.wav"></audio>
+    <audio data-key="70" src="sounds/boom.wav"></audio>
+    <audio data-key="71" src="sounds/ride.wav"></audio>
+    <audio data-key="72" src="sounds/snare.wav"></audio>
+    <audio data-key="74" src="sounds/tom.wav"></audio>
+    <audio data-key="75" src="sounds/tink.wav"></audio>
+    <audio data-key="76" src="sounds/clap.wav"></audio>
+
+    <script>
+      const playNote = (keyCode) => {
+        const audio = document.querySelector(`audio[data-key="${keyCode}"]`);
+        const key = document.querySelector(`.key[data-key="${keyCode}"]`);
+        if (!audio) return;
+        audio.currentTime = 0;
+        audio.play();
+        key.classList.add("playing");
+      };
+
+      window.addEventListener("keydown", function (e) {
+        const { keyCode } = e;
+        playNote(keyCode);
+      });
+
+      function removeTransition(e) {
+        if (e.propertyName !== "transform") return;
+        this.classList.remove("playing");
+      }
+
+      function playByClick(e) {
+        const keyCode = this.getAttribute("data-key");
+        playNote(keyCode);
+      }
+
+      const keys = document.querySelectorAll(".key");
+      keys.forEach((key) => {
+        key.addEventListener("transitionend", removeTransition);
+        key.addEventListener("mousedown", playByClick);
+      });
+    </script>
+  </body>
+</html>
